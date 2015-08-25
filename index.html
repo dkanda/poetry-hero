@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="poetry.js"></script> 
+        <script type="text/javascript" src="app.js"></script>
+        
+ 
+    </head>
+    <body>
+ 
+    <div id="gamepadPrompt"></div>
+    <div id="gamepadDisplay"></div>
+ 
+        <style>
+            svg {
+                background-color: #3b3b3c;
+            }
+
+            circle {
+                fill: none;
+                stroke: #398FBD;
+            }
+            rect {
+                fill: #ffffff;
+                stroke: #ffffff;
+            }
+        </style>
+
+        <body>
+            <script src="d3.v3.min.js"></script>
+            <script>
+                $(document).ready(function () {
+
+                    var margin = {
+                        top: 40,
+                        right: 40,
+                        bottom: 40,
+                        left: 40
+                    }, width = 960 - margin.left - margin.right,
+                        height = 500 - margin.top - margin.bottom;
+
+                    var y = d3.scale.ordinal().domain(d3.range(1)).rangePoints([0, height]);
+
+                    var svg = d3.select("body")
+                        .append("svg")
+                        .attr("id", "circle")
+                        .attr("width", width + margin.left + margin.right)
+                        .attr("height", height + margin.top + margin.bottom)
+                        .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                    svg.selectAll("circle")
+                        .data(y.domain())
+                        .enter()
+                        .append("circle")
+                        .attr("stroke-width", 20)
+                        .attr("r", 10)
+                        .attr("cx", width / 2)
+                        .attr("cy", y)
+                        .each(pulse);
+                    var rect = svg.append("rect")
+                    .attr("x", -40)
+                    .attr("y", -40)
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", 20);
+
+                    function pulse() {
+                        var circle = svg.select("circle");
+                        (function repeat() {
+                            circle = circle.transition()
+                                .duration(tempo / 10)
+                                .attr("stroke-width", 20)
+                                .attr("r", 10)
+                                .transition()
+                                .duration(tempo)
+                                .attr('stroke-width', 0.5)
+                                .attr("r", 200)
+                                .ease('sine')
+                                .each("end", repeat);
+                        })();
+                    }
+                });
+            </script>
+        </body>
+</html>
